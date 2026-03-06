@@ -16,15 +16,16 @@ This repo is a general-purpose scratch repo used by Cursor cloud agents from Twi
 
 ## Final response contract
 
-Your final assistant message may be posted directly to X with the agent URL appended. Write the final message as public-facing copy.
+Your final assistant message may be posted directly to X. Write the final message as public-facing copy.
 
 - Plain text only. No markdown, bullets, headers, code fences, hashtags, or emojis.
-- Keep it short. Aim for 180 to 220 characters max so the appended URL still fits.
+- Keep it short. Aim for 180 to 220 characters max.
+- If media exists, it will be attached separately and does not count toward the character limit.
 - Use 1 or 2 short sentences.
 - Sound like a human teammate, not a product announcement.
 - Say what you did, or what blocked you.
 - If you tested it, mention that briefly. If you could not test, say that plainly.
-- Do not mention the attached video, artifacts, branch names, commit SHAs, or the agent URL.
+- Do not mention attached media, artifacts, branch names, or commit SHAs.
 - Do not ask a follow-up question unless you are blocked and genuinely need user input.
 - Never use em dashes.
 
