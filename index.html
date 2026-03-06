@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Breakout / Arkanoid</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="game-shell">
+      <h1>Breakout / Arkanoid</h1>
+      <section class="hud" aria-label="Game status">
+        <p><span class="label">Score</span> <span id="score">0</span></p>
+        <p><span class="label">Lives</span> <span id="lives">3</span></p>
+        <p><span class="label">Level</span> <span id="level">1</span></p>
+      </section>
+      <canvas id="game" width="800" height="560" aria-label="Breakout game board"></canvas>
+      <section class="controls">
+        <button id="start-btn" type="button">Start</button>
+        <button id="restart-btn" type="button">Restart</button>
+      </section>
+      <p class="hint">Move with ←/→, A/D, or your mouse.</p>
+    </main>
+    <script src="game.js"></script>
+  </body>
+</html>
