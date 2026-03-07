@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Paint Clone</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="toolbar">
+        <section class="tool-group">
+          <button class="tool active" data-tool="pencil" title="Pencil">Pencil</button>
+          <button class="tool" data-tool="brush" title="Brush">Brush</button>
+          <button class="tool" data-tool="eraser" title="Eraser">Eraser</button>
+          <button class="tool" data-tool="line" title="Line">Line</button>
+          <button class="tool" data-tool="rectangle" title="Rectangle">Rect</button>
+          <button class="tool" data-tool="circle" title="Circle">Circle</button>
+          <button class="tool" data-tool="bucket" title="Fill bucket">Fill</button>
+        </section>
+
+        <section class="tool-group">
+          <label>
+            Stroke
+            <input id="strokeColor" type="color" value="#000000" />
+          </label>
+          <label>
+            Fill
+            <input id="fillColor" type="color" value="#ff0000" />
+          </label>
+          <label class="slider-label">
+            Size
+            <input id="sizeRange" type="range" min="1" max="60" value="4" />
+            <span id="sizeValue">4</span>
+          </label>
+          <label class="check-label">
+            <input id="fillShapes" type="checkbox" />
+            Filled shape
+          </label>
+        </section>
+
+        <section class="tool-group">
+          <button id="undoBtn" title="Undo (Ctrl+Z)">Undo</button>
+          <button id="redoBtn" title="Redo (Ctrl+Y)">Redo</button>
+          <button id="newBtn" title="New canvas (Ctrl+N)">New</button>
+          <button id="openBtn" title="Open image">Open</button>
+          <input id="openInput" type="file" accept="image/*" hidden />
+          <button id="saveBtn" title="Save as PNG (Ctrl+S)">Save PNG</button>
+        </section>
+      </header>
+
+      <section class="canvas-wrap">
+        <canvas id="paintCanvas"></canvas>
+      </section>
+
+      <footer class="statusbar">
+        <span id="toolStatus">Tool: Pencil</span>
+        <span id="coordsStatus">x: 0, y: 0</span>
+      </footer>
+    </main>
+    <script src="renderer.js"></script>
+  </body>
+</html>

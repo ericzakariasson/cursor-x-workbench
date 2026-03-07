@@ -1,0 +1,108 @@
+:root {
+  color-scheme: light;
+  font-family: "Segoe UI", Tahoma, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  background: #bdbdbd;
+}
+
+.app-shell {
+  height: 100%;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 10px;
+  border-bottom: 1px solid #a7a7a7;
+  background: #ececec;
+}
+
+.tool-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #f8f8f8;
+  border: 1px solid #c8c8c8;
+  border-radius: 6px;
+  padding: 6px;
+}
+
+.tool-group label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+}
+
+.slider-label {
+  min-width: 150px;
+}
+
+.slider-label input[type="range"] {
+  width: 90px;
+}
+
+.check-label {
+  white-space: nowrap;
+}
+
+button {
+  appearance: none;
+  border: 1px solid #8f8f8f;
+  background: #f4f4f4;
+  color: #111;
+  border-radius: 4px;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #ffffff;
+}
+
+button:active {
+  transform: translateY(1px);
+}
+
+button.active {
+  background: #d7e6ff;
+  border-color: #4d87e0;
+}
+
+.canvas-wrap {
+  overflow: hidden;
+  padding: 10px;
+  display: flex;
+}
+
+#paintCanvas {
+  width: 100%;
+  height: 100%;
+  background: #ffffff;
+  border: 1px solid #a0a0a0;
+  box-shadow: inset 0 0 0 1px #fff;
+  cursor: crosshair;
+  touch-action: none;
+}
+
+.statusbar {
+  background: #efefef;
+  border-top: 1px solid #b0b0b0;
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 12px;
+  font-size: 12px;
+  color: #222;
+}

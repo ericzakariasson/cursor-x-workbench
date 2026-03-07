@@ -1,0 +1,19 @@
+{
+  "name": "ms-paint-electron-clone",
+  "version": "1.0.0",
+  "description": "A simple MS Paint style drawing app built with Electron",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "keywords": [
+    "electron",
+    "paint",
+    "drawing"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^40.8.0"
+  }
+}
