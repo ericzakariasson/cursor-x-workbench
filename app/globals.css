@@ -5,28 +5,32 @@
 html,
 body {
   margin: 0;
-  min-height: 100%;
+  height: 100%;
   font-family: Arial, Helvetica, sans-serif;
   background: #111827;
   color: #e5e7eb;
 }
 
 body {
-  min-height: 100vh;
+  min-height: 100dvh;
+  overflow: hidden;
 }
 
 .page {
-  min-height: 100vh;
-  padding: 12px;
+  width: 100vw;
+  height: 100dvh;
 }
 
 .card {
+  display: flex;
+  flex-direction: column;
   width: 100%;
-  padding: 14px;
+  height: 100%;
+  padding: 10px;
   background: #1f2937;
-  border: 1px solid #374151;
-  border-radius: 10px;
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35);
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
 }
 
 h1 {
@@ -42,7 +46,7 @@ p {
 .controls {
   display: grid;
   gap: 6px;
-  margin-top: 14px;
+  margin-top: 10px;
 }
 
 .buttonRow {
@@ -94,8 +98,8 @@ input[type="range"] {
   margin-top: 10px;
   padding: 10px;
   width: 100%;
-  min-height: 40vh;
-  max-height: 62vh;
+  flex: 1;
+  min-height: 0;
   overflow: auto;
   background: #030712;
   border: 1px solid #1f2937;
@@ -109,6 +113,7 @@ input[type="range"] {
 }
 
 .responsiveHint {
+  margin-top: 8px;
   color: #93c5fd;
   font-size: 0.82rem;
 }
@@ -124,16 +129,8 @@ input[type="range"] {
 }
 
 @media (min-width: 720px) {
-  .page {
-    display: grid;
-    place-items: center;
-    padding: 24px;
-  }
-
   .card {
-    width: min(100%, 980px);
-    padding: 22px;
-    border-radius: 12px;
+    padding: 16px;
   }
 
   h1 {
@@ -153,11 +150,5 @@ input[type="range"] {
     width: max-content;
     min-width: 180px;
     padding: 8px 14px;
-  }
-
-  .asciiOutput {
-    min-height: 38vh;
-    max-height: 70vh;
-    padding: 14px;
   }
 }

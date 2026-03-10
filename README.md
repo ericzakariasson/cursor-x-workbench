@@ -19,6 +19,7 @@ If you are on a machine without a webcam, use "Start Demo Feed" to exercise the 
 - Converts each frame to grayscale luminance values.
 - Maps luminance to ASCII density characters and renders live in a `<pre>`.
 - Keeps rendering responsive by clamping active columns to viewport width.
+- Uses a fullscreen layout so the app always fills the viewport.
 - Includes column and FPS controls to tune quality/performance.
 
 ## Build
