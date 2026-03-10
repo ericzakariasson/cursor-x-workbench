@@ -7,35 +7,94 @@ body {
   margin: 0;
   min-height: 100%;
   font-family: Arial, Helvetica, sans-serif;
-  background: #f7f7f7;
-  color: #111;
+  background: radial-gradient(circle at top, #12244a 0%, #050b18 58%, #03050d 100%);
+  color: #f8f8ff;
 }
 
 body {
   min-height: 100vh;
 }
 
-.page {
-  display: grid;
+button {
+  font: inherit;
+}
+
+.game-page {
   min-height: 100vh;
+  display: grid;
   place-items: center;
   padding: 24px;
 }
 
-.card {
-  width: min(100%, 560px);
-  padding: 32px;
-  background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 12px;
+.game-shell {
+  width: min(980px, 100%);
+  background: rgba(8, 14, 30, 0.88);
+  border: 1px solid #24385f;
+  border-radius: 14px;
+  padding: 22px;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.45);
 }
 
 h1 {
-  margin: 0 0 12px;
-  font-size: 2rem;
+  margin: 0;
+  font-size: clamp(1.6rem, 2.8vw, 2.4rem);
 }
 
-p {
-  margin: 0;
-  line-height: 1.5;
+.subhead {
+  margin: 8px 0 14px;
+  color: #c0d4ff;
+}
+
+.hud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  margin-bottom: 14px;
+  color: #d8e5ff;
+}
+
+.status {
+  margin-left: auto;
+  font-weight: 700;
+}
+
+.status-playing {
+  color: #8ad1ff;
+}
+
+.status-won {
+  color: #66ef89;
+}
+
+.status-lost {
+  color: #ff839d;
+}
+
+.game-canvas {
+  width: 100%;
+  max-width: 900px;
+  border: 1px solid #35558e;
+  border-radius: 10px;
+  display: block;
+  background: #060b1a;
+}
+
+.controls {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 14px;
+}
+
+.controls button {
+  background: #4f78ff;
+  color: #fff;
+  border: 0;
+  border-radius: 10px;
+  padding: 10px 16px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.controls button:hover {
+  background: #7091ff;
 }

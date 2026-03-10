@@ -1,6 +1,6 @@
-# cursor-x-workbench
+# Space Invaders (Next.js)
 
-A super vanilla Next.js app using the App Router and plain JavaScript.
+A browser-based Space Invaders clone built with Next.js and a canvas renderer.
 
 ## Run locally
 
@@ -9,9 +9,14 @@ npm install
 npm run dev
 ```
 
-Open `http://localhost:3000`.
+Open `http://localhost:3000` and use:
 
-## Build
+- Left/Right arrows or A/D to move
+- Space to shoot
+- Autopilot engages when idle
+- Restart button to start a new round
+
+## Build and run production
 
 ```bash
 npm run build
