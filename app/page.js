@@ -1,11 +1,13 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 const DENSITY = ".,:;irsXA253hMHGS#9B&@";
 const CHAR_ASPECT_RATIO = 0.5;
 const DEMO_SOURCE_WIDTH = 640;
 const DEMO_SOURCE_HEIGHT = 360;
+const MIN_COLUMNS = 24;
+const MAX_COLUMNS = 220;
 
 function luminanceToChar(luminance) {
   const index = Math.min(
@@ -19,15 +21,33 @@ export default function Home() {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const demoCanvasRef = useRef(null);
+  const asciiOutputRef = useRef(null);
   const frameRef = useRef(0);
   const streamRef = useRef(null);
   const rafRef = useRef(null);
+  const modeRef = useRef(null);
+  const fpsRef = useRef(15);
+  const activeColumnsRef = useRef(120);
 
   const [ascii, setAscii] = useState("");
   const [mode, setMode] = useState(null);
   const [error, setError] = useState("");
   const [columns, setColumns] = useState(120);
   const [fps, setFps] = useState(15);
+  const [maxResponsiveColumns, setMaxResponsiveColumns] = useState(120);
+
+  const activeColumns = useMemo(
+    () => Math.max(MIN_COLUMNS, Math.min(columns, maxResponsiveColumns)),
+    [columns, maxResponsiveColumns],
+  );
+
+  useEffect(() => {
+    fpsRef.current = fps;
+  }, [fps]);
+
+  useEffect(() => {
+    activeColumnsRef.current = activeColumns;
+  }, [activeColumns]);
 
   const stopFeed = useCallback(() => {
     if (rafRef.current) {
@@ -44,7 +64,9 @@ export default function Home() {
       videoRef.current.srcObject = null;
     }
 
+    modeRef.current = null;
     setMode(null);
+    frameRef.current = 0;
   }, []);
 
   const drawDemoFrame = useCallback((context, width, height, time) => {
@@ -65,6 +87,11 @@ export default function Home() {
   }, []);
 
   const renderLoop = useCallback(() => {
+    const activeMode = modeRef.current;
+    if (!activeMode) {
+      return;
+    }
+
     const video = videoRef.current;
     const canvas = canvasRef.current;
     const demoCanvas = demoCanvasRef.current;
@@ -73,21 +100,26 @@ export default function Home() {
       return;
     }
 
-    if (mode === "camera" && (!video || video.readyState < 2)) {
+    if (activeMode === "camera" && (!video || video.readyState < 2)) {
       rafRef.current = requestAnimationFrame(renderLoop);
       return;
     }
 
     frameRef.current += 1;
-    const frameInterval = Math.max(1, Math.round(60 / fps));
+    const frameInterval = Math.max(1, Math.round(60 / fpsRef.current));
     if (frameRef.current % frameInterval !== 0) {
       rafRef.current = requestAnimationFrame(renderLoop);
       return;
     }
 
-    const width = Math.max(1, columns);
-    const sourceWidth = mode === "camera" ? video.videoWidth : DEMO_SOURCE_WIDTH;
-    const sourceHeight = mode === "camera" ? video.videoHeight : DEMO_SOURCE_HEIGHT;
+    const width = Math.max(MIN_COLUMNS, activeColumnsRef.current);
+    const sourceWidth = activeMode === "camera" ? video.videoWidth : DEMO_SOURCE_WIDTH;
+    const sourceHeight = activeMode === "camera" ? video.videoHeight : DEMO_SOURCE_HEIGHT;
+    if (sourceWidth <= 0 || sourceHeight <= 0) {
+      rafRef.current = requestAnimationFrame(renderLoop);
+      return;
+    }
+
     const height = Math.max(
       1,
       Math.floor((sourceHeight / sourceWidth) * width * CHAR_ASPECT_RATIO),
@@ -103,9 +135,9 @@ export default function Home() {
       return;
     }
 
-    if (mode === "camera") {
+    if (activeMode === "camera") {
       context.drawImage(video, 0, 0, width, height);
-    } else if (mode === "demo" && demoCanvas) {
+    } else if (activeMode === "demo" && demoCanvas) {
       demoCanvas.width = width;
       demoCanvas.height = height;
       const demoContext = demoCanvas.getContext("2d");
@@ -132,7 +164,17 @@ export default function Home() {
 
     setAscii(output);
     rafRef.current = requestAnimationFrame(renderLoop);
-  }, [columns, drawDemoFrame, fps, mode, stopFeed]);
+  }, [drawDemoFrame, stopFeed]);
+
+  const startRendering = useCallback(
+    (nextMode) => {
+      frameRef.current = 0;
+      modeRef.current = nextMode;
+      setMode(nextMode);
+      rafRef.current = requestAnimationFrame(renderLoop);
+    },
+    [renderLoop],
+  );
 
   const startCamera = useCallback(async () => {
     stopFeed();
@@ -159,9 +201,7 @@ export default function Home() {
       video.srcObject = stream;
       await video.play();
 
-      frameRef.current = 0;
-      setMode("camera");
-      rafRef.current = requestAnimationFrame(renderLoop);
+      startRendering("camera");
     } catch (err) {
       setError(
         err instanceof Error
@@ -170,15 +210,49 @@ export default function Home() {
       );
       stopFeed();
     }
-  }, [renderLoop, stopFeed]);
+  }, [startRendering, stopFeed]);
 
   const startDemoFeed = useCallback(() => {
     stopFeed();
     setError("");
-    frameRef.current = 0;
-    setMode("demo");
-    rafRef.current = requestAnimationFrame(renderLoop);
-  }, [renderLoop, stopFeed]);
+    startRendering("demo");
+  }, [startRendering, stopFeed]);
+
+  useEffect(() => {
+    const updateMaxResponsiveColumns = () => {
+      const outputElement = asciiOutputRef.current;
+      if (!outputElement) {
+        return;
+      }
+
+      const computedStyle = window.getComputedStyle(outputElement);
+      const fontSize = Number.parseFloat(computedStyle.fontSize) || 6;
+      const horizontalPadding =
+        (Number.parseFloat(computedStyle.paddingLeft) || 0) +
+        (Number.parseFloat(computedStyle.paddingRight) || 0);
+      const usableWidth = Math.max(80, outputElement.clientWidth - horizontalPadding);
+      const estimatedCharWidth = Math.max(2, fontSize * 0.62);
+      const nextMax = Math.max(
+        MIN_COLUMNS,
+        Math.min(MAX_COLUMNS, Math.floor(usableWidth / estimatedCharWidth)),
+      );
+      setMaxResponsiveColumns(nextMax);
+    };
+
+    updateMaxResponsiveColumns();
+    const observer = new ResizeObserver(updateMaxResponsiveColumns);
+    if (asciiOutputRef.current) {
+      observer.observe(asciiOutputRef.current);
+    }
+    window.addEventListener("resize", updateMaxResponsiveColumns);
+    window.addEventListener("orientationchange", updateMaxResponsiveColumns);
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", updateMaxResponsiveColumns);
+      window.removeEventListener("orientationchange", updateMaxResponsiveColumns);
+    };
+  }, []);
 
   useEffect(() => {
     return () => {
@@ -190,33 +264,35 @@ export default function Home() {
     <main className="page">
       <section className="card">
         <h1>ASCII Camera</h1>
-        <p>Turn your webcam into live ASCII art in real time.</p>
+        <p>Turn your webcam into live ASCII art in real time with mobile-first responsive rendering.</p>
 
         <div className="controls">
-          <button
-            className="controlButton"
-            type="button"
-            onClick={mode === "camera" ? stopFeed : startCamera}
-          >
-            {mode === "camera" ? "Stop Camera" : "Start Camera"}
-          </button>
+          <div className="buttonRow">
+            <button
+              className="controlButton"
+              type="button"
+              onClick={mode === "camera" ? stopFeed : startCamera}
+            >
+              {mode === "camera" ? "Stop Camera" : "Start Camera"}
+            </button>
 
-          <button
-            className="controlButton secondaryButton"
-            type="button"
-            onClick={mode === "demo" ? stopFeed : startDemoFeed}
-          >
-            {mode === "demo" ? "Stop Demo Feed" : "Start Demo Feed"}
-          </button>
+            <button
+              className="controlButton secondaryButton"
+              type="button"
+              onClick={mode === "demo" ? stopFeed : startDemoFeed}
+            >
+              {mode === "demo" ? "Stop Demo Feed" : "Start Demo Feed"}
+            </button>
+          </div>
 
           <label htmlFor="columns">
-            Columns: <span>{columns}</span>
+            Columns target: <span>{columns}</span> (rendering <span>{activeColumns}</span>)
           </label>
           <input
             id="columns"
             type="range"
-            min="60"
-            max="180"
+            min={MIN_COLUMNS}
+            max={MAX_COLUMNS}
             step="2"
             value={columns}
             onChange={(event) => setColumns(Number(event.target.value))}
@@ -238,7 +314,11 @@ export default function Home() {
 
         {error ? <p className="error">{error}</p> : null}
 
-        <pre className="asciiOutput" aria-live="polite">
+        {maxResponsiveColumns < columns ? (
+          <p className="responsiveHint">Viewport limit: {maxResponsiveColumns} columns</p>
+        ) : null}
+
+        <pre ref={asciiOutputRef} className="asciiOutput" aria-live="polite">
           {ascii || "Press Start Camera to begin (or use Demo Feed)."}
         </pre>
 

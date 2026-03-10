@@ -16,47 +16,49 @@ body {
 }
 
 .page {
-  display: grid;
   min-height: 100vh;
-  place-items: center;
-  padding: 24px;
+  padding: 12px;
 }
 
 .card {
-  width: min(100%, 960px);
-  padding: 24px;
+  width: 100%;
+  padding: 14px;
   background: #1f2937;
   border: 1px solid #374151;
-  border-radius: 12px;
+  border-radius: 10px;
   box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35);
 }
 
 h1 {
   margin: 0;
-  font-size: 2rem;
+  font-size: 1.5rem;
 }
 
 p {
-  margin: 10px 0 0;
+  margin: 8px 0 0;
   line-height: 1.5;
 }
 
 .controls {
   display: grid;
+  gap: 6px;
+  margin-top: 14px;
+}
+
+.buttonRow {
+  display: grid;
   grid-template-columns: 1fr;
   gap: 8px;
-  margin-top: 20px;
 }
 
 .controlButton {
-  width: max-content;
-  min-width: 140px;
+  width: 100%;
   border: 1px solid #60a5fa;
   background: #2563eb;
   color: #eff6ff;
   border-radius: 8px;
-  font-size: 0.95rem;
-  padding: 8px 14px;
+  font-size: 0.92rem;
+  padding: 9px 12px;
   cursor: pointer;
 }
 
@@ -74,53 +76,88 @@ p {
 }
 
 label {
-  margin-top: 8px;
-  font-size: 0.95rem;
+  margin-top: 6px;
+  font-size: 0.92rem;
 }
 
 label span {
   display: inline-block;
-  min-width: 30px;
+  min-width: 26px;
   color: #93c5fd;
 }
 
 input[type="range"] {
-  width: min(100%, 320px);
+  width: 100%;
 }
 
 .asciiOutput {
-  margin-top: 20px;
-  padding: 14px;
+  margin-top: 10px;
+  padding: 10px;
   width: 100%;
-  max-height: 70vh;
+  min-height: 40vh;
+  max-height: 62vh;
   overflow: auto;
   background: #030712;
   border: 1px solid #1f2937;
   border-radius: 8px;
   color: #a7f3d0;
   font-family: "Courier New", Courier, monospace;
-  font-size: 7px;
-  line-height: 0.8;
+  font-size: clamp(5px, 1.5vw, 8px);
+  line-height: 0.95;
   white-space: pre;
   word-break: normal;
+}
+
+.responsiveHint {
+  color: #93c5fd;
+  font-size: 0.82rem;
 }
 
 .error {
   color: #fca5a5;
   margin: 0;
-  margin-top: 12px;
+  margin-top: 10px;
 }
 
 .hidden {
   display: none;
 }
 
-@media (max-width: 720px) {
+@media (min-width: 720px) {
+  .page {
+    display: grid;
+    place-items: center;
+    padding: 24px;
+  }
+
   .card {
-    padding: 16px;
+    width: min(100%, 980px);
+    padding: 22px;
+    border-radius: 12px;
+  }
+
+  h1 {
+    font-size: 1.9rem;
+  }
+
+  .controls {
+    margin-top: 18px;
+    gap: 8px;
+  }
+
+  .buttonRow {
+    grid-template-columns: repeat(2, minmax(180px, max-content));
+  }
+
+  .controlButton {
+    width: max-content;
+    min-width: 180px;
+    padding: 8px 14px;
   }
 
   .asciiOutput {
-    font-size: 6px;
+    min-height: 38vh;
+    max-height: 70vh;
+    padding: 14px;
   }
 }
