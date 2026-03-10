@@ -49,6 +49,12 @@ p {
   margin-top: 10px;
 }
 
+.gridInfo {
+  margin-top: 2px;
+  color: #93c5fd;
+  font-size: 0.82rem;
+}
+
 .buttonRow {
   display: grid;
   grid-template-columns: 1fr;
@@ -107,15 +113,9 @@ input[type="range"] {
   color: #a7f3d0;
   font-family: "Courier New", Courier, monospace;
   font-size: clamp(5px, 1.5vw, 8px);
-  line-height: 0.95;
+  line-height: 1;
   white-space: pre;
   word-break: normal;
-}
-
-.responsiveHint {
-  margin-top: 8px;
-  color: #93c5fd;
-  font-size: 0.82rem;
 }
 
 .error {

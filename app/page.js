@@ -3,11 +3,12 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 const DENSITY = ".,:;irsXA253hMHGS#9B&@";
-const CHAR_ASPECT_RATIO = 0.5;
 const DEMO_SOURCE_WIDTH = 640;
 const DEMO_SOURCE_HEIGHT = 360;
 const MIN_COLUMNS = 24;
-const MAX_COLUMNS = 220;
+const MAX_COLUMNS = 520;
+const MIN_ROWS = 16;
+const MAX_ROWS = 320;
 
 function luminanceToChar(luminance) {
   const index = Math.min(
@@ -27,27 +28,23 @@ export default function Home() {
   const rafRef = useRef(null);
   const modeRef = useRef(null);
   const fpsRef = useRef(15);
-  const activeColumnsRef = useRef(120);
+  const renderGridRef = useRef({ columns: 120, rows: 56 });
+  const textMeasureCanvasRef = useRef(null);
 
   const [ascii, setAscii] = useState("");
   const [mode, setMode] = useState(null);
   const [error, setError] = useState("");
-  const [columns, setColumns] = useState(120);
   const [fps, setFps] = useState(15);
-  const [maxResponsiveColumns, setMaxResponsiveColumns] = useState(120);
+  const [gridInfo, setGridInfo] = useState({ columns: 120, rows: 56 });
 
-  const activeColumns = useMemo(
-    () => Math.max(MIN_COLUMNS, Math.min(columns, maxResponsiveColumns)),
-    [columns, maxResponsiveColumns],
+  const gridLabel = useMemo(
+    () => `${gridInfo.columns} x ${gridInfo.rows}`,
+    [gridInfo.columns, gridInfo.rows],
   );
 
   useEffect(() => {
     fpsRef.current = fps;
   }, [fps]);
-
-  useEffect(() => {
-    activeColumnsRef.current = activeColumns;
-  }, [activeColumns]);
 
   const stopFeed = useCallback(() => {
     if (rafRef.current) {
@@ -112,18 +109,12 @@ export default function Home() {
       return;
     }
 
-    const width = Math.max(MIN_COLUMNS, activeColumnsRef.current);
-    const sourceWidth = activeMode === "camera" ? video.videoWidth : DEMO_SOURCE_WIDTH;
-    const sourceHeight = activeMode === "camera" ? video.videoHeight : DEMO_SOURCE_HEIGHT;
-    if (sourceWidth <= 0 || sourceHeight <= 0) {
+    const width = Math.max(MIN_COLUMNS, renderGridRef.current.columns);
+    const height = Math.max(MIN_ROWS, renderGridRef.current.rows);
+    if (width <= 0 || height <= 0) {
       rafRef.current = requestAnimationFrame(renderLoop);
       return;
     }
-
-    const height = Math.max(
-      1,
-      Math.floor((sourceHeight / sourceWidth) * width * CHAR_ASPECT_RATIO),
-    );
 
     canvas.width = width;
     canvas.height = height;
@@ -136,7 +127,29 @@ export default function Home() {
     }
 
     if (activeMode === "camera") {
-      context.drawImage(video, 0, 0, width, height);
+      const sourceWidth = video.videoWidth;
+      const sourceHeight = video.videoHeight;
+      if (sourceWidth <= 0 || sourceHeight <= 0) {
+        rafRef.current = requestAnimationFrame(renderLoop);
+        return;
+      }
+
+      const targetAspect = width / height;
+      const sourceAspect = sourceWidth / sourceHeight;
+      let sx = 0;
+      let sy = 0;
+      let sw = sourceWidth;
+      let sh = sourceHeight;
+
+      if (sourceAspect > targetAspect) {
+        sw = sourceHeight * targetAspect;
+        sx = (sourceWidth - sw) / 2;
+      } else {
+        sh = sourceWidth / targetAspect;
+        sy = (sourceHeight - sh) / 2;
+      }
+
+      context.drawImage(video, sx, sy, sw, sh, 0, 0, width, height);
     } else if (activeMode === "demo" && demoCanvas) {
       demoCanvas.width = width;
       demoCanvas.height = height;
@@ -219,7 +232,7 @@ export default function Home() {
   }, [startRendering, stopFeed]);
 
   useEffect(() => {
-    const updateMaxResponsiveColumns = () => {
+    const updateRenderGrid = () => {
       const outputElement = asciiOutputRef.current;
       if (!outputElement) {
         return;
@@ -227,30 +240,54 @@ export default function Home() {
 
       const computedStyle = window.getComputedStyle(outputElement);
       const fontSize = Number.parseFloat(computedStyle.fontSize) || 6;
+      const lineHeight = Number.parseFloat(computedStyle.lineHeight) || fontSize;
       const horizontalPadding =
         (Number.parseFloat(computedStyle.paddingLeft) || 0) +
         (Number.parseFloat(computedStyle.paddingRight) || 0);
+      const verticalPadding =
+        (Number.parseFloat(computedStyle.paddingTop) || 0) +
+        (Number.parseFloat(computedStyle.paddingBottom) || 0);
       const usableWidth = Math.max(80, outputElement.clientWidth - horizontalPadding);
-      const estimatedCharWidth = Math.max(2, fontSize * 0.62);
-      const nextMax = Math.max(
+      const usableHeight = Math.max(80, outputElement.clientHeight - verticalPadding);
+      if (!textMeasureCanvasRef.current) {
+        textMeasureCanvasRef.current = document.createElement("canvas");
+      }
+      const measureContext = textMeasureCanvasRef.current.getContext("2d");
+      let estimatedCharWidth = Math.max(2, fontSize * 0.62);
+      if (measureContext) {
+        const font = computedStyle.font || `${fontSize}px ${computedStyle.fontFamily}`;
+        measureContext.font = font;
+        estimatedCharWidth = Math.max(2, measureContext.measureText("M").width);
+      }
+      const nextColumns = Math.max(
         MIN_COLUMNS,
         Math.min(MAX_COLUMNS, Math.floor(usableWidth / estimatedCharWidth)),
       );
-      setMaxResponsiveColumns(nextMax);
+      const nextRows = Math.max(
+        MIN_ROWS,
+        Math.min(MAX_ROWS, Math.floor(usableHeight / Math.max(4, lineHeight))),
+      );
+
+      renderGridRef.current = { columns: nextColumns, rows: nextRows };
+      setGridInfo((previous) =>
+        previous.columns === nextColumns && previous.rows === nextRows
+          ? previous
+          : { columns: nextColumns, rows: nextRows },
+      );
     };
 
-    updateMaxResponsiveColumns();
-    const observer = new ResizeObserver(updateMaxResponsiveColumns);
+    updateRenderGrid();
+    const observer = new ResizeObserver(updateRenderGrid);
     if (asciiOutputRef.current) {
       observer.observe(asciiOutputRef.current);
     }
-    window.addEventListener("resize", updateMaxResponsiveColumns);
-    window.addEventListener("orientationchange", updateMaxResponsiveColumns);
+    window.addEventListener("resize", updateRenderGrid);
+    window.addEventListener("orientationchange", updateRenderGrid);
 
     return () => {
       observer.disconnect();
-      window.removeEventListener("resize", updateMaxResponsiveColumns);
-      window.removeEventListener("orientationchange", updateMaxResponsiveColumns);
+      window.removeEventListener("resize", updateRenderGrid);
+      window.removeEventListener("orientationchange", updateRenderGrid);
     };
   }, []);
 
@@ -285,18 +322,7 @@ export default function Home() {
             </button>
           </div>
 
-          <label htmlFor="columns">
-            Columns target: <span>{columns}</span> (rendering <span>{activeColumns}</span>)
-          </label>
-          <input
-            id="columns"
-            type="range"
-            min={MIN_COLUMNS}
-            max={MAX_COLUMNS}
-            step="2"
-            value={columns}
-            onChange={(event) => setColumns(Number(event.target.value))}
-          />
+          <p className="gridInfo">Render grid: {gridLabel}</p>
 
           <label htmlFor="fps">
             FPS cap: <span>{fps}</span>
@@ -313,10 +339,6 @@ export default function Home() {
         </div>
 
         {error ? <p className="error">{error}</p> : null}
-
-        {maxResponsiveColumns < columns ? (
-          <p className="responsiveHint">Viewport limit: {maxResponsiveColumns} columns</p>
-        ) : null}
 
         <pre ref={asciiOutputRef} className="asciiOutput" aria-live="polite">
           {ascii || "Press Start Camera to begin (or use Demo Feed)."}
