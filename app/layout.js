@@ -8,7 +8,15 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body className="app-shell">
+        <div className="app-shell__content">{children}</div>
+        <footer className="app-shell__footer">
+          <span>Built with Cursor</span>
+          <a href="https://cursor.com/agents" target="_blank" rel="noreferrer">
+            cursor.com/agents
+          </a>
+        </footer>
+      </body>
     </html>
   );
 }

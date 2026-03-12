@@ -13,11 +13,48 @@ body {
 
 body {
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-shell__content {
+  display: flex;
+  flex: 1;
+}
+
+.app-shell__footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+  position: fixed;
+  left: 16px;
+  bottom: 16px;
+  z-index: 1000;
+  max-width: min(calc(100vw - 32px), 320px);
+  padding: 10px 12px;
+  text-align: left;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: #666;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid #ddd;
+  border-radius: 999px;
+  box-shadow: 0 8px 24px rgba(17, 17, 17, 0.08);
+}
+
+.app-shell__footer a {
+  color: inherit;
+  text-underline-offset: 0.2em;
+  overflow-wrap: anywhere;
 }
 
 .page {
+  flex: 1;
   display: grid;
-  min-height: 100vh;
+  width: 100%;
+  min-height: 0;
   place-items: center;
   padding: 24px;
 }
