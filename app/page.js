@@ -182,7 +182,7 @@ export default function Home() {
 
         <div className="formula-bar">
           <strong>{activeCell}:</strong> {selectedRawValue || "(empty)"}{" "}
-          <span className="computed-preview">=> {selectedComputedValue || "(empty)"}</span>
+          <span className="computed-preview">{"=>"} {selectedComputedValue || "(empty)"}</span>
         </div>
 
         <div className="sheet-scroll">
