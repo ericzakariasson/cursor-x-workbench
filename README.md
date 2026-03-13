@@ -1,6 +1,6 @@
 # cursor-x-workbench
 
-A super vanilla Next.js app using the App Router and plain JavaScript.
+A Next.js load test app that sends backend-driven request bursts to a target URL.
 
 ## Run locally
 
@@ -10,6 +10,13 @@ npm run dev
 ```
 
 Open `http://localhost:3000`.
+
+## What it does
+
+- Accepts a URL input.
+- Lets you choose requests per second with a slider.
+- Runs the load test from a backend route (`/api/load-test`).
+- Returns success/failure counts and latency metrics.
 
 ## Build
 
