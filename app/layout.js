@@ -1,8 +1,8 @@
 import "./globals.css";
 
 export const metadata = {
-  title: "Cursor X Workbench",
-  description: "A super vanilla Next.js app."
+  title: "Mood to Abstract Painting",
+  description: "Type a sentence and watch it become mood-based abstract art."
 };
 
 export default function RootLayout({ children }) {

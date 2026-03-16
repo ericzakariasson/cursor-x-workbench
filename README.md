@@ -1,6 +1,14 @@
-# cursor-x-workbench
+# Mood to Abstract Painting
 
-A super vanilla Next.js app using the App Router and plain JavaScript.
+A small Next.js app where you type a sentence and generate abstract art from
+detected mood:
+
+- angry -> red palette
+- calm -> blue palette
+- joyful -> yellow burst effects
+
+You can save generated pieces to a local gallery (persisted in browser
+`localStorage`).
 
 ## Run locally
 
@@ -11,7 +19,7 @@ npm run dev
 
 Open `http://localhost:3000`.
 
-## Build
+## Production build
 
 ```bash
 npm run build
