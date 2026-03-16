@@ -205,39 +205,43 @@ export default function Home() {
         return;
       }
 
-      const audio = await initAudio();
-      if (!audio) {
-        return;
-      }
-
-      const now = audio.context.currentTime;
-      const tone = audio.context.createOscillator();
-      const overtone = audio.context.createOscillator();
-      const envelope = audio.context.createGain();
-
-      tone.type = "triangle";
-      tone.frequency.setValueAtTime(note.freq, now);
-      overtone.type = "sine";
-      overtone.frequency.setValueAtTime(note.freq * 2, now);
-
-      envelope.gain.setValueAtTime(0.0001, now);
-      envelope.gain.exponentialRampToValueAtTime(
-        0.24 + strength * 0.16,
-        now + 0.015
-      );
-      envelope.gain.exponentialRampToValueAtTime(0.0001, now + 1.05);
-
-      tone.connect(envelope);
-      overtone.connect(envelope);
-      envelope.connect(audio.master);
-
-      tone.start(now);
-      overtone.start(now);
-      tone.stop(now + 1.1);
-      overtone.stop(now + 1.1);
-
       markNoteActive(noteName);
       spawnVisual(note, strength);
+
+      try {
+        const audio = await initAudio();
+        if (!audio) {
+          return;
+        }
+
+        const now = audio.context.currentTime;
+        const tone = audio.context.createOscillator();
+        const overtone = audio.context.createOscillator();
+        const envelope = audio.context.createGain();
+
+        tone.type = "triangle";
+        tone.frequency.setValueAtTime(note.freq, now);
+        overtone.type = "sine";
+        overtone.frequency.setValueAtTime(note.freq * 2, now);
+
+        envelope.gain.setValueAtTime(0.0001, now);
+        envelope.gain.exponentialRampToValueAtTime(
+          0.24 + strength * 0.16,
+          now + 0.015
+        );
+        envelope.gain.exponentialRampToValueAtTime(0.0001, now + 1.05);
+
+        tone.connect(envelope);
+        overtone.connect(envelope);
+        envelope.connect(audio.master);
+
+        tone.start(now);
+        overtone.start(now);
+        tone.stop(now + 1.1);
+        overtone.stop(now + 1.1);
+      } catch {
+        // Allow visuals to continue even if audio is unavailable.
+      }
     },
     [initAudio, markNoteActive, spawnVisual]
   );
