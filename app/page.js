@@ -68,7 +68,6 @@ function randomBetween(min, max) {
 
 export default function Home() {
   const canvasRef = useRef(null);
-  const wrapperRef = useRef(null);
   const animationRef = useRef(null);
   const audioRef = useRef(null);
   const particlesRef = useRef([]);
@@ -106,18 +105,28 @@ export default function Home() {
 
   const addVisualBurst = useCallback((note, xPos, yPos) => {
     const hue = ((Math.log2(note.frequency / 55) * 90) + 360) % 360;
-    const x = xPos ?? randomBetween(0.2, 0.8) * window.innerWidth;
-    const y = yPos ?? randomBetween(0.2, 0.8) * window.innerHeight;
+    let x = xPos ?? randomBetween(0.2, 0.8) * window.innerWidth;
+    let y = yPos ?? randomBetween(0.2, 0.8) * window.innerHeight;
+
+    // Shift key-triggered bursts upward so visuals appear above the keyboard.
+    if (typeof xPos === "number") {
+      x += randomBetween(-48, 48);
+    }
+    if (typeof yPos === "number") {
+      y -= randomBetween(120, 230);
+    }
+    x = Math.max(24, Math.min(window.innerWidth - 24, x));
+    y = Math.max(24, Math.min(window.innerHeight - 24, y));
 
     particlesRef.current.push(
-      ...Array.from({ length: 22 }, () => ({
+      ...Array.from({ length: 42 }, () => ({
         x,
         y,
-        vx: randomBetween(-3.5, 3.5),
-        vy: randomBetween(-3.5, 3.5),
-        size: randomBetween(1.4, 4.6),
-        life: randomBetween(34, 66),
-        maxLife: randomBetween(34, 66),
+        vx: randomBetween(-4.8, 4.8),
+        vy: randomBetween(-4.2, 4.2),
+        size: randomBetween(2.2, 6.6),
+        life: randomBetween(56, 110),
+        maxLife: randomBetween(56, 110),
         hue: (hue + randomBetween(-24, 24) + 360) % 360
       }))
     );
@@ -135,18 +144,18 @@ export default function Home() {
     fractalRef.current.push({
       x,
       y,
-      size: randomBetween(42, 110),
-      life: 1,
+      size: randomBetween(92, 180),
+      life: 0,
       hue,
-      rotation: randomBetween(-0.9, 0.9),
-      depth: Math.round(randomBetween(4, 6))
+      rotation: randomBetween(-1.1, 1.1),
+      depth: Math.round(randomBetween(5, 7))
     });
 
     shimmerRef.current.push({
       hue,
-      amplitude: randomBetween(20, 78),
+      amplitude: randomBetween(24, 94),
       createdAt: performance.now(),
-      wavelength: randomBetween(130, 340)
+      wavelength: randomBetween(110, 320)
     });
   }, []);
 
@@ -247,7 +256,7 @@ export default function Home() {
       shimmerRef.current = shimmerRef.current.filter((band) => timestamp - band.createdAt < 3600);
       particlesRef.current = particlesRef.current.filter((particle) => particle.life > 0);
       wavesRef.current = wavesRef.current.filter((wave) => wave.alpha > 0.015);
-      fractalRef.current = fractalRef.current.filter((burst) => burst.life < 0.96);
+      fractalRef.current = fractalRef.current.filter((burst) => burst.life < 1.45);
 
       if (mode === "waves") {
         shimmerRef.current.forEach((band, index) => {
@@ -279,10 +288,15 @@ export default function Home() {
         particle.life -= 1;
         const lifeRatio = Math.max(0, particle.life / particle.maxLife);
         if (mode === "particles") {
+          context.globalCompositeOperation = "lighter";
+          context.shadowBlur = 12;
+          context.shadowColor = `hsla(${particle.hue}, 100%, 70%, 0.85)`;
           context.fillStyle = `hsla(${particle.hue}, 100%, 62%, ${lifeRatio})`;
           context.beginPath();
           context.arc(particle.x, particle.y, particle.size * (0.5 + lifeRatio), 0, Math.PI * 2);
           context.fill();
+          context.shadowBlur = 0;
+          context.globalCompositeOperation = "source-over";
         }
       });
 
@@ -299,15 +313,15 @@ export default function Home() {
       });
 
       fractalRef.current.forEach((burst) => {
-        burst.life += 0.018;
+        burst.life += 0.014;
         if (mode === "fractals") {
-          const alpha = Math.max(0, 1 - burst.life);
-          const length = burst.size * (1 + burst.life * 0.4);
+          const alpha = Math.max(0, 1 - burst.life / 1.45);
+          const length = burst.size * (1 + burst.life * 0.6);
           drawFractalBranch(
             burst.x,
             burst.y,
             length,
-            -Math.PI / 2 + burst.rotation + Math.sin(timestamp / 400) * 0.2,
+            -Math.PI / 2 + burst.rotation + Math.sin(timestamp / 370) * 0.22,
             burst.depth,
             burst.hue,
             alpha
@@ -338,14 +352,23 @@ export default function Home() {
       quality: 8,
       width: canvasRef.current.width,
       height: canvasRef.current.height,
-      workerScript: "https://unpkg.com/gif.js.optimized/dist/gif.worker.js"
+      workerScript: "/gif.worker.js"
     });
+
+    const failExport = () => {
+      setExporting(false);
+      setExportLabel("Export failed, retry");
+      window.setTimeout(() => setExportLabel("Export GIF"), 2400);
+    };
 
     const totalFrames = 90;
     let captured = 0;
 
     const captureFrame = () => {
-      if (!canvasRef.current) return;
+      if (!canvasRef.current) {
+        failExport();
+        return;
+      }
       gif.addFrame(canvasRef.current, { copy: true, delay: 33 });
       captured += 1;
       setExportLabel(`Capturing ${captured}/${totalFrames}...`);
@@ -364,6 +387,7 @@ export default function Home() {
         setExporting(false);
         setExportLabel("Export GIF");
       });
+      gif.on("abort", failExport);
       gif.render();
     };
 
@@ -371,7 +395,7 @@ export default function Home() {
   }, [exporting]);
 
   return (
-    <main ref={wrapperRef} className="experience">
+    <main className="experience">
       <canvas ref={canvasRef} className="visual-canvas" />
 
       <section className="overlay">
