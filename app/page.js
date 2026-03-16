@@ -51,6 +51,7 @@ export default function Home() {
   const wavesRef = useRef([]);
   const fractalsRef = useRef([]);
   const pulsesRef = useRef([]);
+  const splashesRef = useRef([]);
   const timersRef = useRef(new Map());
   const audioRef = useRef({ context: null, master: null });
 
@@ -189,13 +190,23 @@ export default function Home() {
         const dpr = window.devicePixelRatio || 1;
         const width = canvas.width / dpr;
         const height = canvas.height / dpr;
+        const hue = hueFromFrequency(note.freq);
+
+        splashesRef.current.push({
+          x: width * (0.1 + Math.random() * 0.8),
+          y: height * (0.08 + Math.random() * 0.78),
+          radius: 65 + Math.random() * 120,
+          life: 0.52,
+          hue
+        });
+
         pulsesRef.current.push({
           x: width * (0.2 + Math.random() * 0.6),
           y: height * (0.2 + Math.random() * 0.6),
           radius: 18,
           growth: 4 + Math.random() * 4,
           life: 0.95,
-          hue: hueFromFrequency(note.freq)
+          hue
         });
       }
 
@@ -407,8 +418,26 @@ export default function Home() {
       const width = canvas.width / dpr;
       const height = canvas.height / dpr;
 
-      context.fillStyle = "rgba(5, 5, 16, 0.08)";
+      context.fillStyle = "rgba(5, 5, 16, 0.035)";
       context.fillRect(0, 0, width, height);
+
+      context.globalCompositeOperation = "lighter";
+      for (let i = splashesRef.current.length - 1; i >= 0; i -= 1) {
+        const splash = splashesRef.current[i];
+        splash.life -= 0.013;
+        splash.radius *= 0.995;
+        context.fillStyle = `hsla(${splash.hue}, 100%, 60%, ${Math.max(
+          splash.life,
+          0
+        )})`;
+        context.beginPath();
+        context.arc(splash.x, splash.y, splash.radius, 0, Math.PI * 2);
+        context.fill();
+
+        if (splash.life <= 0) {
+          splashesRef.current.splice(i, 1);
+        }
+      }
 
       if (modeRef.current === "particles") {
         context.globalCompositeOperation = "lighter";
