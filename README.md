@@ -1,6 +1,6 @@
 # cursor-x-workbench
 
-A super vanilla Next.js app using the App Router and plain JavaScript.
+An interactive lava lamp demo built with Next.js where your cursor acts as the heat source.
 
 ## Run locally
 
@@ -10,6 +10,8 @@ npm run dev
 ```
 
 Open `http://localhost:3000`.
+
+Move your cursor over the lamp to heat and stir the lava blobs.
 
 ## Build
 
