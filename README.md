@@ -1,6 +1,6 @@
-# cursor-x-workbench
+# City Skyline Day Cycle
 
-A super vanilla Next.js app using the App Router and plain JavaScript.
+A small Next.js scene that renders a city skyline and automatically changes the sky, stars, building tones, and window lights based on local time.
 
 ## Run locally
 
@@ -17,3 +17,10 @@ Open `http://localhost:3000`.
 npm run build
 npm run start
 ```
+
+## What changes through the day
+
+- Dawn: warm horizon and faint stars
+- Day: bright sky and muted windows
+- Sunset: orange glow and city lights warming up
+- Night: dark sky, full stars, and lit windows

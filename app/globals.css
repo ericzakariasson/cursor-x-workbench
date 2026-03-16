@@ -6,36 +6,345 @@ html,
 body {
   margin: 0;
   min-height: 100%;
-  font-family: Arial, Helvetica, sans-serif;
-  background: #f7f7f7;
-  color: #111;
+  font-family: "Inter", "Segoe UI", Arial, sans-serif;
 }
 
 body {
   min-height: 100vh;
 }
 
-.page {
-  display: grid;
+.skyline-page {
+  --text: #f5fbff;
+  --sky-top: #73b8ff;
+  --sky-bottom: #d3eeff;
+  --ambient: #d9f0ff;
+  --sun: #ffe687;
+  --moon: #f3f6ff;
+  --far-building: #5f7ea1;
+  --near-building: #38557c;
+  --window-off: #43607f;
+  --window-on: #f2e4b3;
+  --ground: #26394f;
+  --star-opacity: 0;
+  --cloud-opacity: 0.85;
   min-height: 100vh;
+  display: grid;
   place-items: center;
   padding: 24px;
+  background: radial-gradient(circle at 50% 0%, #ffffff 0%, var(--ambient) 48%, #a9d8ff 100%);
+  transition: background 800ms ease;
 }
 
-.card {
-  width: min(100%, 560px);
-  padding: 32px;
-  background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 12px;
+.phase-dawn {
+  --sky-top: #786cc0;
+  --sky-bottom: #f2a173;
+  --ambient: #f9c5a8;
+  --sun: #ffda88;
+  --moon: #f0ecff;
+  --far-building: #5f5f8d;
+  --near-building: #3f3f69;
+  --window-off: #484865;
+  --window-on: #ffdba6;
+  --ground: #2f2b43;
+  --star-opacity: 0.22;
+  --cloud-opacity: 0.72;
 }
 
-h1 {
-  margin: 0 0 12px;
-  font-size: 2rem;
+.phase-day {
+  --sky-top: #73b8ff;
+  --sky-bottom: #d3eeff;
+  --ambient: #d9f0ff;
+  --sun: #ffe687;
+  --moon: #f3f6ff;
+  --far-building: #5f7ea1;
+  --near-building: #38557c;
+  --window-off: #43607f;
+  --window-on: #e5ddc7;
+  --ground: #26394f;
+  --star-opacity: 0;
+  --cloud-opacity: 0.88;
 }
 
-p {
+.phase-sunset {
+  --sky-top: #3e428f;
+  --sky-bottom: #ff8865;
+  --ambient: #ffc8a8;
+  --sun: #ffd79e;
+  --moon: #ebe7ff;
+  --far-building: #585682;
+  --near-building: #3c365f;
+  --window-off: #494361;
+  --window-on: #ffe0a8;
+  --ground: #2e2b49;
+  --star-opacity: 0.28;
+  --cloud-opacity: 0.62;
+}
+
+.phase-night {
+  --text: #e9f0ff;
+  --sky-top: #101a3f;
+  --sky-bottom: #23346b;
+  --ambient: #0d1630;
+  --sun: #ecefff;
+  --moon: #f5f7ff;
+  --far-building: #36405f;
+  --near-building: #242b43;
+  --window-off: #2f3956;
+  --window-on: #ffd37e;
+  --ground: #1a2134;
+  --star-opacity: 1;
+  --cloud-opacity: 0.34;
+}
+
+.skyline-wrapper {
+  width: min(100%, 980px);
+  display: grid;
+  gap: 16px;
+}
+
+.status-panel {
+  color: var(--text);
+  text-shadow: 0 1px 2px rgb(0 0 0 / 35%);
+}
+
+.status-panel h1 {
   margin: 0;
-  line-height: 1.5;
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.status-panel p {
+  margin: 8px 0 0;
+  font-size: clamp(0.95rem, 1.5vw, 1.1rem);
+}
+
+.scene {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  border-radius: 20px;
+  border: 1px solid rgb(255 255 255 / 24%);
+  box-shadow: 0 28px 44px rgb(0 0 0 / 28%);
+  background: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-bottom) 100%);
+  transition: background 1000ms ease;
+}
+
+.sky {
+  position: absolute;
+  inset: 0;
+}
+
+.sun-moon {
+  position: absolute;
+  width: clamp(56px, 8vw, 92px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  left: clamp(44px, 9vw, 130px);
+  top: clamp(36px, 8vh, 80px);
+  background: radial-gradient(circle at 35% 35%, #fff9d8 0%, var(--sun) 58%, #ffbe62 100%);
+  box-shadow: 0 0 48px rgb(255 223 138 / 58%);
+  transition: all 900ms ease;
+}
+
+.phase-night .sun-moon {
+  transform: translate(65%, -12%);
+  background: radial-gradient(circle at 30% 30%, #ffffff 0%, var(--moon) 62%, #d2dbff 100%);
+  box-shadow: 0 0 36px rgb(227 237 255 / 40%);
+}
+
+.phase-dawn .sun-moon {
+  transform: translate(-12%, 6%);
+}
+
+.stars {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.star {
+  --size: calc((var(--i) % 3) + 1px);
+  position: absolute;
+  width: var(--size);
+  height: var(--size);
+  border-radius: 50%;
+  background: #f9fbff;
+  opacity: calc(var(--star-opacity) * 0.9);
+  left: calc((var(--i) * 17%) % 100%);
+  top: calc((var(--i) * 13%) % 60%);
+  animation: twinkle calc(2.7s + (var(--i) * 0.12s)) ease-in-out infinite;
+}
+
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: calc(var(--star-opacity) * 0.55);
+  }
+  50% {
+    opacity: var(--star-opacity);
+  }
+}
+
+.cloud {
+  position: absolute;
+  width: clamp(110px, 18vw, 220px);
+  height: clamp(36px, 6vh, 56px);
+  border-radius: 100px;
+  background: rgb(255 255 255 / 68%);
+  filter: blur(0.35px);
+  opacity: var(--cloud-opacity);
+  transition: opacity 900ms ease;
+}
+
+.cloud::before,
+.cloud::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  background: inherit;
+}
+
+.cloud::before {
+  width: 44%;
+  aspect-ratio: 1;
+  left: 16%;
+  top: -44%;
+}
+
+.cloud::after {
+  width: 34%;
+  aspect-ratio: 1;
+  right: 17%;
+  top: -28%;
+}
+
+.cloud-one {
+  top: 16%;
+  left: -9%;
+  animation: drift-1 52s linear infinite;
+}
+
+.cloud-two {
+  top: 27%;
+  left: 44%;
+  width: clamp(94px, 14vw, 170px);
+  animation: drift-2 44s linear infinite;
+}
+
+@keyframes drift-1 {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(120vw);
+  }
+}
+
+@keyframes drift-2 {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(78vw);
+  }
+}
+
+.horizon-glow {
+  position: absolute;
+  inset: auto 0 24% 0;
+  height: 28%;
+  background: radial-gradient(circle at center, rgb(255 209 146 / 55%) 0%, rgb(255 160 116 / 0%) 72%);
+}
+
+.phase-day .horizon-glow {
+  opacity: 0.2;
+}
+
+.phase-night .horizon-glow {
+  opacity: 0.1;
+}
+
+.buildings {
+  position: absolute;
+  inset: auto 0 0 0;
+  display: flex;
+  align-items: flex-end;
+  width: 100%;
+}
+
+.building {
+  --h: 30%;
+  --d: 0ms;
+  flex: 1;
+  height: var(--h);
+  border-top: 1px solid rgb(255 255 255 / 6%);
+  border-left: 1px solid rgb(0 0 0 / 14%);
+  transform: translateY(0);
+  animation: settle 700ms ease-out both;
+  animation-delay: var(--d);
+}
+
+.far .building {
+  background:
+    linear-gradient(var(--window-off), var(--window-off)),
+    repeating-linear-gradient(
+      90deg,
+      transparent 0 8px,
+      rgb(0 0 0 / 16%) 8px 10px
+    ),
+    repeating-linear-gradient(
+      180deg,
+      transparent 0 12px,
+      rgb(255 255 255 / 5%) 12px 14px
+    ),
+    linear-gradient(var(--far-building), var(--far-building));
+  background-blend-mode: normal;
+}
+
+.near .building {
+  background:
+    repeating-linear-gradient(
+      90deg,
+      transparent 0 9px,
+      rgb(0 0 0 / 20%) 9px 11px
+    ),
+    repeating-linear-gradient(
+      180deg,
+      var(--window-off) 0 11px,
+      var(--window-on) 11px 16px
+    ),
+    linear-gradient(var(--near-building), var(--near-building));
+  background-blend-mode: normal;
+}
+
+.phase-day .near .building {
+  background:
+    repeating-linear-gradient(
+      90deg,
+      transparent 0 9px,
+      rgb(0 0 0 / 20%) 9px 11px
+    ),
+    repeating-linear-gradient(
+      180deg,
+      var(--window-off) 0 15px,
+      rgb(255 255 255 / 10%) 15px 17px
+    ),
+    linear-gradient(var(--near-building), var(--near-building));
+}
+
+.ground {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 7%;
+  background: var(--ground);
+}
+
+@keyframes settle {
+  from {
+    transform: translateY(8px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }

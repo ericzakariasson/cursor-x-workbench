@@ -1,8 +1,8 @@
 import "./globals.css";
 
 export const metadata = {
-  title: "Cursor X Workbench",
-  description: "A super vanilla Next.js app."
+  title: "City Skyline Day Cycle",
+  description: "An animated skyline that changes with local time of day."
 };
 
 export default function RootLayout({ children }) {
