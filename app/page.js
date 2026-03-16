@@ -50,6 +50,7 @@ export default function Home() {
   const particlesRef = useRef([]);
   const wavesRef = useRef([]);
   const fractalsRef = useRef([]);
+  const pulsesRef = useRef([]);
   const timersRef = useRef(new Map());
   const audioRef = useRef({ context: null, master: null });
 
@@ -117,18 +118,18 @@ export default function Home() {
     const centerX = width * 0.5;
     const centerY = height * 0.48;
     const hue = hueFromFrequency(note.freq);
-    const count = Math.round(20 + strength * 10);
+    const count = Math.round(36 + strength * 18);
 
     for (let i = 0; i < count; i += 1) {
       const angle = (Math.PI * 2 * i) / count;
-      const speed = 0.8 + Math.random() * 2.2;
+      const speed = 1.6 + Math.random() * 4.4;
       particlesRef.current.push({
         x: centerX,
         y: centerY,
         vx: Math.cos(angle) * speed,
         vy: Math.sin(angle) * speed,
-        size: 1.5 + Math.random() * 4,
-        life: 0.8 + Math.random() * 0.4,
+        size: 2.8 + Math.random() * 7,
+        life: 1.15 + Math.random() * 0.65,
         hue: hue + Math.random() * 24 - 12
       });
     }
@@ -153,7 +154,7 @@ export default function Home() {
       phase: Math.random() * Math.PI * 2,
       width,
       yPosition,
-      life: 1,
+      life: 1.25,
       hue
     });
   }, []);
@@ -172,7 +173,7 @@ export default function Home() {
     fractalsRef.current.push({
       x: width * (0.2 + Math.random() * 0.6),
       y: height * (0.35 + Math.random() * 0.45),
-      length: 40 + strength * 60,
+      length: 85 + strength * 85,
       branchAngle: 0.35 + Math.random() * 0.3,
       depth: 6,
       baseAngle: -Math.PI / 2 + (Math.random() * 2 - 1) * 0.45,
@@ -183,6 +184,21 @@ export default function Home() {
 
   const spawnVisual = useCallback(
     (note, strength = 1) => {
+      const canvas = canvasRef.current;
+      if (canvas) {
+        const dpr = window.devicePixelRatio || 1;
+        const width = canvas.width / dpr;
+        const height = canvas.height / dpr;
+        pulsesRef.current.push({
+          x: width * (0.2 + Math.random() * 0.6),
+          y: height * (0.2 + Math.random() * 0.6),
+          radius: 18,
+          growth: 4 + Math.random() * 4,
+          life: 0.95,
+          hue: hueFromFrequency(note.freq)
+        });
+      }
+
       if (modeRef.current === "particles") {
         spawnParticles(note, strength);
         return;
@@ -356,8 +372,8 @@ export default function Home() {
       const x2 = x + Math.cos(angle) * length;
       const y2 = y + Math.sin(angle) * length;
 
-      context.strokeStyle = `hsla(${hue}, 90%, 70%, ${alpha})`;
-      context.lineWidth = Math.max(0.5, depth * 0.45);
+      context.strokeStyle = `hsla(${hue}, 100%, 74%, ${alpha})`;
+      context.lineWidth = Math.max(1, depth * 0.8);
       context.beginPath();
       context.moveTo(x, y);
       context.lineTo(x2, y2);
@@ -395,15 +411,16 @@ export default function Home() {
       context.fillRect(0, 0, width, height);
 
       if (modeRef.current === "particles") {
+        context.globalCompositeOperation = "lighter";
         for (let i = particlesRef.current.length - 1; i >= 0; i -= 1) {
           const particle = particlesRef.current[i];
           particle.x += particle.vx;
           particle.y += particle.vy;
-          particle.vx *= 0.988;
-          particle.vy *= 0.988;
-          particle.life -= 0.014;
+          particle.vx *= 0.984;
+          particle.vy *= 0.984;
+          particle.life -= 0.02;
 
-          context.fillStyle = `hsla(${particle.hue}, 95%, 65%, ${Math.max(
+          context.fillStyle = `hsla(${particle.hue}, 100%, 70%, ${Math.max(
             particle.life,
             0
           )})`;
@@ -416,16 +433,17 @@ export default function Home() {
           }
         }
       } else if (modeRef.current === "waves") {
+        context.globalCompositeOperation = "lighter";
         for (let i = wavesRef.current.length - 1; i >= 0; i -= 1) {
           const wave = wavesRef.current[i];
           wave.phase += wave.speed;
-          wave.life -= 0.009;
+          wave.life -= 0.013;
 
-          context.strokeStyle = `hsla(${wave.hue}, 90%, 60%, ${Math.max(
+          context.strokeStyle = `hsla(${wave.hue}, 100%, 68%, ${Math.max(
             wave.life,
             0
           )})`;
-          context.lineWidth = 2.4;
+          context.lineWidth = 3.6;
           context.beginPath();
 
           for (let x = 0; x <= wave.width; x += 8) {
@@ -447,9 +465,10 @@ export default function Home() {
           }
         }
       } else {
+        context.globalCompositeOperation = "lighter";
         for (let i = fractalsRef.current.length - 1; i >= 0; i -= 1) {
           const fractal = fractalsRef.current[i];
-          fractal.life -= 0.012;
+          fractal.life -= 0.016;
           fractal.length *= 0.997;
 
           drawFractalBranch(
@@ -468,6 +487,26 @@ export default function Home() {
           }
         }
       }
+
+      context.globalCompositeOperation = "screen";
+      for (let i = pulsesRef.current.length - 1; i >= 0; i -= 1) {
+        const pulse = pulsesRef.current[i];
+        pulse.radius += pulse.growth;
+        pulse.life -= 0.045;
+        context.strokeStyle = `hsla(${pulse.hue}, 100%, 72%, ${Math.max(
+          pulse.life,
+          0
+        )})`;
+        context.lineWidth = 3;
+        context.beginPath();
+        context.arc(pulse.x, pulse.y, pulse.radius, 0, Math.PI * 2);
+        context.stroke();
+
+        if (pulse.life <= 0) {
+          pulsesRef.current.splice(i, 1);
+        }
+      }
+      context.globalCompositeOperation = "source-over";
 
       animationRef.current = window.requestAnimationFrame(animate);
     };
