@@ -29,6 +29,7 @@ const phaseLabels = {
 
 export default function Home() {
   const [now, setNow] = useState(null);
+  const [previewPhase, setPreviewPhase] = useState("auto");
 
   useEffect(() => {
     const updateTime = () => {
@@ -40,7 +41,8 @@ export default function Home() {
     return () => clearInterval(timer);
   }, []);
 
-  const phase = now ? getPhase(now) : "day";
+  const detectedPhase = now ? getPhase(now) : "day";
+  const phase = previewPhase === "auto" ? detectedPhase : previewPhase;
   const timeLabel = useMemo(() => {
     if (!now) {
       return "Loading local time…";
@@ -55,8 +57,22 @@ export default function Home() {
           <h1>City Skyline</h1>
           <p>
             {phaseLabels[phase]} · {timeLabel}
+            {previewPhase !== "auto" ? " · Preview mode" : ""}
           </p>
         </header>
+
+        <div className="controls" aria-label="Time of day controls">
+          {["auto", "dawn", "day", "sunset", "night"].map((option) => (
+            <button
+              key={option}
+              type="button"
+              className={option === previewPhase ? "active" : ""}
+              onClick={() => setPreviewPhase(option)}
+            >
+              {option === "auto" ? "Auto" : phaseLabels[option]}
+            </button>
+          ))}
+        </div>
 
         <div className="scene" role="img" aria-label="Animated city skyline that changes by time of day">
           <div className="sky">

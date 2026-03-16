@@ -24,3 +24,5 @@ npm run start
 - Day: bright sky and muted windows
 - Sunset: orange glow and city lights warming up
 - Night: dark sky, full stars, and lit windows
+
+Use the on-screen controls to preview each phase instantly, or leave it on Auto to follow local time.

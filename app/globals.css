@@ -117,6 +117,35 @@ body {
   font-size: clamp(0.95rem, 1.5vw, 1.1rem);
 }
 
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.controls button {
+  appearance: none;
+  border: 1px solid rgb(255 255 255 / 28%);
+  background: rgb(8 16 34 / 22%);
+  color: var(--text);
+  border-radius: 999px;
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 180ms ease, border-color 180ms ease, transform 180ms ease;
+}
+
+.controls button:hover {
+  border-color: rgb(255 255 255 / 52%);
+  background: rgb(8 16 34 / 34%);
+}
+
+.controls button.active {
+  border-color: rgb(255 255 255 / 62%);
+  background: rgb(255 255 255 / 18%);
+  transform: translateY(-1px);
+}
+
 .scene {
   position: relative;
   overflow: hidden;
