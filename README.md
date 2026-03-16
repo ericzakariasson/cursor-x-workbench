@@ -1,6 +1,6 @@
 # cursor-x-workbench
 
-A super vanilla Next.js app using the App Router and plain JavaScript.
+A Next.js app that renders an interactive 3D model inspired by the original starter card.
 
 ## Run locally
 
@@ -10,6 +10,8 @@ npm run dev
 ```
 
 Open `http://localhost:3000`.
+
+Use pointer drag to rotate the model and mouse wheel to zoom in/out.
 
 ## Build
 

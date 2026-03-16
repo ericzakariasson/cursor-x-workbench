@@ -7,7 +7,7 @@ body {
   margin: 0;
   min-height: 100%;
   font-family: Arial, Helvetica, sans-serif;
-  background: #f7f7f7;
+  background: radial-gradient(circle at 20% 15%, #f5f8ff 0%, #e6ecf8 45%, #dae1f2 100%);
   color: #111;
 }
 
@@ -19,23 +19,37 @@ body {
   display: grid;
   min-height: 100vh;
   place-items: center;
-  padding: 24px;
+  padding: 24px 16px;
 }
 
-.card {
-  width: min(100%, 560px);
-  padding: 32px;
-  background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 12px;
+.scene-card {
+  width: min(100%, 900px);
+  padding: 28px;
+  border: 1px solid #ced7ee;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 30px 70px rgba(55, 70, 110, 0.2);
 }
 
 h1 {
   margin: 0 0 12px;
-  font-size: 2rem;
+  font-size: clamp(1.45rem, 2.8vw, 2rem);
+  letter-spacing: 0.01em;
 }
 
 p {
-  margin: 0;
+  margin: 0 0 18px;
   line-height: 1.5;
+  color: #50618d;
+}
+
+.model-canvas {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  display: block;
+  border-radius: 14px;
+  border: 1px solid #d6def1;
+  background: linear-gradient(180deg, #f1f4ff 0%, #e4e9f6 100%);
+  cursor: grab;
 }
