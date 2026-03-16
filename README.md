@@ -1,6 +1,13 @@
-# cursor-x-workbench
+# Text Mood Painter
 
-A super vanilla Next.js app using the App Router and plain JavaScript.
+Type a sentence and the app generates an abstract painting based on text mood:
+
+- Angry -> red-focused jagged strokes
+- Calm -> blue layered waves and circles
+- Joyful -> yellow bursts with colorful accents
+
+You can save generated paintings to a gallery, and the gallery persists in local
+browser storage.
 
 ## Run locally
 

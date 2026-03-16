@@ -16,26 +16,189 @@ body {
 }
 
 .page {
-  display: grid;
   min-height: 100vh;
-  place-items: center;
-  padding: 24px;
+  padding: 32px 16px;
+  background: radial-gradient(circle at top, #efefef 0%, #dfdfdf 100%);
 }
 
-.card {
-  width: min(100%, 560px);
-  padding: 32px;
-  background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 12px;
+.appShell {
+  width: min(100%, 1100px);
+  margin: 0 auto;
+  padding: 24px;
+  background: #ffffff;
+  border: 1px solid #d8d8d8;
+  border-radius: 16px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.08);
 }
 
 h1 {
-  margin: 0 0 12px;
-  font-size: 2rem;
+  margin: 0 0 8px;
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
 }
 
 p {
   margin: 0;
   line-height: 1.5;
+}
+
+h2 {
+  margin: 0 0 10px;
+  font-size: 1.2rem;
+}
+
+.composer {
+  margin-top: 20px;
+}
+
+label {
+  display: inline-block;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+textarea {
+  width: 100%;
+  border: 1px solid #c9c9c9;
+  border-radius: 12px;
+  padding: 12px 14px;
+  resize: vertical;
+  min-height: 100px;
+  font: inherit;
+}
+
+textarea:focus {
+  outline: 2px solid #8cb6ff;
+  border-color: #8cb6ff;
+}
+
+.controls {
+  margin-top: 12px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+button {
+  border: 0;
+  border-radius: 999px;
+  background: #111;
+  color: #fff;
+  padding: 10px 16px;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+button:hover {
+  opacity: 0.92;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+button.secondary {
+  background: #f0f0f0;
+  color: #111;
+  border: 1px solid #d3d3d3;
+}
+
+.moodBadge {
+  border-radius: 999px;
+  padding: 8px 12px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  border: 1px solid transparent;
+}
+
+.mood-angry {
+  color: #7a0018;
+  background: #ffd6de;
+  border-color: #ff9eb1;
+}
+
+.mood-calm {
+  color: #003061;
+  background: #d8ebff;
+  border-color: #a8d0ff;
+}
+
+.mood-joyful {
+  color: #5c4700;
+  background: #fff4bf;
+  border-color: #ffe178;
+}
+
+.previewCard,
+.gallerySection {
+  margin-top: 22px;
+  border: 1px solid #e0e0e0;
+  border-radius: 14px;
+  padding: 16px;
+  background: #fafafa;
+}
+
+.previewCard img {
+  width: 100%;
+  max-width: 760px;
+  border-radius: 12px;
+  border: 1px solid #d6d6d6;
+  display: block;
+}
+
+.previewCard p {
+  margin-top: 10px;
+}
+
+.galleryHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.galleryGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 14px;
+}
+
+.galleryItem {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.galleryItem img {
+  width: 100%;
+  display: block;
+  aspect-ratio: 12 / 7;
+  object-fit: cover;
+}
+
+.galleryMeta {
+  padding: 10px;
+}
+
+.galleryMeta p {
+  margin-top: 8px;
+  font-size: 0.92rem;
+}
+
+.emptyState {
+  color: #555;
+}
+
+@media (max-width: 720px) {
+  .page {
+    padding: 16px 10px;
+  }
+
+  .appShell {
+    padding: 16px;
+  }
 }
