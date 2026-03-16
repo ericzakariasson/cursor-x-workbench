@@ -238,15 +238,18 @@ export default function Home() {
       const x2 = x + Math.cos(angle) * length;
       const y2 = y + Math.sin(angle) * length;
 
-      context.strokeStyle = `hsla(${hue}, 90%, 68%, ${alpha})`;
-      context.lineWidth = Math.max(0.8, depth * 0.66);
+      context.strokeStyle = `hsla(${hue}, 100%, 78%, ${alpha})`;
+      context.lineWidth = Math.max(1.3, depth * 1.02);
+      context.shadowBlur = 10;
+      context.shadowColor = `hsla(${hue}, 100%, 70%, ${alpha * 0.8})`;
       context.beginPath();
       context.moveTo(x, y);
       context.lineTo(x2, y2);
       context.stroke();
+      context.shadowBlur = 0;
 
-      drawFractalBranch(x2, y2, length * 0.72, angle - 0.46, depth - 1, hue + 10, alpha * 0.84);
-      drawFractalBranch(x2, y2, length * 0.72, angle + 0.46, depth - 1, hue - 10, alpha * 0.84);
+      drawFractalBranch(x2, y2, length * 0.77, angle - 0.5, depth - 1, hue + 12, alpha * 0.88);
+      drawFractalBranch(x2, y2, length * 0.77, angle + 0.5, depth - 1, hue - 12, alpha * 0.88);
     };
 
     const tick = (timestamp) => {
@@ -318,8 +321,8 @@ export default function Home() {
           const alpha = Math.max(0, 1 - burst.life / 1.45);
           const length = burst.size * (1 + burst.life * 0.6);
           context.globalCompositeOperation = "lighter";
-          for (let index = 0; index < 5; index += 1) {
-            const spreadAngle = (Math.PI * 2 * index) / 5;
+          for (let index = 0; index < 7; index += 1) {
+            const spreadAngle = (Math.PI * 2 * index) / 7;
             drawFractalBranch(
               burst.x,
               burst.y,
@@ -330,7 +333,12 @@ export default function Home() {
               alpha
             );
           }
-          context.fillStyle = `hsla(${burst.hue}, 100%, 72%, ${alpha * 0.72})`;
+          context.strokeStyle = `hsla(${burst.hue}, 100%, 74%, ${alpha * 0.75})`;
+          context.lineWidth = 3;
+          context.beginPath();
+          context.arc(burst.x, burst.y, 26 + burst.life * 18, 0, Math.PI * 2);
+          context.stroke();
+          context.fillStyle = `hsla(${burst.hue}, 100%, 72%, ${alpha * 0.9})`;
           context.beginPath();
           context.arc(burst.x, burst.y, 12 + burst.life * 12, 0, Math.PI * 2);
           context.fill();
