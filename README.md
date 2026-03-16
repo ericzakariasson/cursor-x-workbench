@@ -1,6 +1,11 @@
-# cursor-x-workbench
+# Interactive Typography Explorer
 
-A super vanilla Next.js app using the App Router and plain JavaScript.
+Dark, minimal type playground for design students:
+
+- Hover each glyph to inspect anatomy markers (x-height, ascender, counter, serif).
+- Animated SVG guides reveal baseline and structure.
+- Google Fonts switching for side-by-side comparison.
+- Quiz mode for anatomy practice.
 
 ## Run locally
 
@@ -11,7 +16,7 @@ npm run dev
 
 Open `http://localhost:3000`.
 
-## Build
+## Production build
 
 ```bash
 npm run build
