@@ -317,15 +317,24 @@ export default function Home() {
         if (mode === "fractals") {
           const alpha = Math.max(0, 1 - burst.life / 1.45);
           const length = burst.size * (1 + burst.life * 0.6);
-          drawFractalBranch(
-            burst.x,
-            burst.y,
-            length,
-            -Math.PI / 2 + burst.rotation + Math.sin(timestamp / 370) * 0.22,
-            burst.depth,
-            burst.hue,
-            alpha
-          );
+          context.globalCompositeOperation = "lighter";
+          for (let index = 0; index < 5; index += 1) {
+            const spreadAngle = (Math.PI * 2 * index) / 5;
+            drawFractalBranch(
+              burst.x,
+              burst.y,
+              length * 0.42,
+              -Math.PI / 2 + burst.rotation + spreadAngle + Math.sin(timestamp / 370) * 0.22,
+              burst.depth,
+              burst.hue + index * 16,
+              alpha
+            );
+          }
+          context.fillStyle = `hsla(${burst.hue}, 100%, 72%, ${alpha * 0.72})`;
+          context.beginPath();
+          context.arc(burst.x, burst.y, 12 + burst.life * 12, 0, Math.PI * 2);
+          context.fill();
+          context.globalCompositeOperation = "source-over";
         }
       });
 
