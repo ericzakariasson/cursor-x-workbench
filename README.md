@@ -1,6 +1,7 @@
-# cursor-x-workbench
+# Time of Day Skyline
 
-A super vanilla Next.js app using the App Router and plain JavaScript.
+A lightweight Next.js scene that shows a city skyline which changes with local
+time (dawn, day, sunset, night). It also includes buttons to preview each phase.
 
 ## Run locally
 
