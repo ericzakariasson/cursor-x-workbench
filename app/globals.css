@@ -6,36 +6,220 @@ html,
 body {
   margin: 0;
   min-height: 100%;
-  font-family: Arial, Helvetica, sans-serif;
-  background: #f7f7f7;
-  color: #111;
+  font-family:
+    Inter,
+    "Segoe UI",
+    Roboto,
+    Arial,
+    Helvetica,
+    sans-serif;
+  background: #050510;
+  color: #f5f6ff;
 }
 
 body {
   min-height: 100vh;
 }
 
-.page {
-  display: grid;
+.app {
   min-height: 100vh;
-  place-items: center;
-  padding: 24px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
-.card {
-  width: min(100%, 560px);
-  padding: 32px;
-  background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 12px;
+.visualCanvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
 }
 
-h1 {
-  margin: 0 0 12px;
-  font-size: 2rem;
+.hud {
+  z-index: 2;
+  width: min(100%, 920px);
+  margin: 18px auto 0;
+  padding: 16px 18px;
+  border-radius: 16px;
+  background: rgba(6, 10, 28, 0.7);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  display: grid;
+  gap: 10px;
 }
 
-p {
+.hud h1 {
+  margin: 0;
+  font-size: clamp(1.3rem, 2vw + 0.8rem, 2rem);
+}
+
+.hud p {
   margin: 0;
   line-height: 1.5;
+  color: rgba(244, 247, 255, 0.88);
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modes {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.modes button,
+.exportButton {
+  border: 1px solid rgba(255, 255, 255, 0.34);
+  background: rgba(255, 255, 255, 0.08);
+  color: #f3f4ff;
+  font-size: 0.94rem;
+  padding: 9px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.modes button.active {
+  background: linear-gradient(130deg, #7e6cff, #ff5ed8);
+  border-color: transparent;
+}
+
+.exportButton {
+  background: linear-gradient(140deg, #1be5e0, #1783ff);
+  border-color: transparent;
+  font-weight: 600;
+}
+
+.exportButton:disabled {
+  opacity: 0.72;
+  cursor: progress;
+}
+
+.status {
+  min-height: 1.4em;
+  font-size: 0.92rem;
+}
+
+.hint {
+  font-size: 0.84rem;
+  color: rgba(233, 237, 255, 0.72);
+}
+
+.piano {
+  width: min(100%, 960px);
+  margin: 0 auto 18px;
+  position: relative;
+  z-index: 2;
+  padding: 10px;
+  border-radius: 18px;
+  background: rgba(4, 7, 22, 0.76);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  touch-action: none;
+}
+
+.whiteKeys {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.whiteKey {
+  height: min(230px, 35vh);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 0 0 12px 12px;
+  background: linear-gradient(180deg, #f9fbff, #dee5ff);
+  color: #111427;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  padding-bottom: 10px;
+  gap: 2px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.whiteKey span {
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.whiteKey small {
+  font-size: 0.7rem;
+  opacity: 0.78;
+}
+
+.blackKeys {
+  pointer-events: none;
+  position: absolute;
+  inset: 10px;
+  height: min(150px, 24vh);
+}
+
+.blackKey {
+  pointer-events: all;
+  position: absolute;
+  transform: translateX(-50%);
+  width: 10.3%;
+  height: 100%;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 0 0 9px 9px;
+  background: linear-gradient(180deg, #1f2334, #0c0f1c 70%);
+  color: #f7f7ff;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  padding-bottom: 9px;
+  gap: 2px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.blackKey span {
+  font-size: 0.72rem;
+}
+
+.blackKey small {
+  font-size: 0.63rem;
+  opacity: 0.7;
+}
+
+.whiteKey.pressed {
+  background: linear-gradient(180deg, #ffeeb8, #ffc773);
+}
+
+.blackKey.pressed {
+  background: linear-gradient(180deg, #5e4cff, #3621c7);
+}
+
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (max-width: 840px) {
+  .hud {
+    margin-top: 10px;
+    border-radius: 12px;
+  }
+
+  .whiteKeys {
+    gap: 6px;
+  }
+
+  .whiteKey {
+    height: min(180px, 32vh);
+  }
+
+  .blackKeys {
+    height: min(115px, 20vh);
+  }
 }

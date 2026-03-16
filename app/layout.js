@@ -1,8 +1,8 @@
 import "./globals.css";
 
 export const metadata = {
-  title: "Cursor X Workbench",
-  description: "A super vanilla Next.js app."
+  title: "Web Piano Painter",
+  description: "A Web Audio piano with generative canvas visuals and GIF export."
 };
 
 export default function RootLayout({ children }) {
