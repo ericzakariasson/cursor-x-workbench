@@ -56,8 +56,9 @@ export default function Home() {
         <header className="status-panel">
           <h1>City Skyline</h1>
           <p>
-            {phaseLabels[phase]} · {timeLabel}
-            {previewPhase !== "auto" ? " · Preview mode" : ""}
+            {previewPhase === "auto"
+              ? `${phaseLabels[phase]} · ${timeLabel}`
+              : `${phaseLabels[phase]} preview · local time ${timeLabel}`}
           </p>
         </header>
 
