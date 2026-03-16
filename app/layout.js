@@ -1,8 +1,8 @@
 import "./globals.css";
 
 export const metadata = {
-  title: "Cursor X Workbench",
-  description: "A super vanilla Next.js app."
+  title: "Generative Kimono Pattern Designer",
+  description: "Interactive kimono textile pattern playground with deep slider controls."
 };
 
 export default function RootLayout({ children }) {

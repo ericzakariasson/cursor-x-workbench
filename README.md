@@ -1,6 +1,8 @@
-# cursor-x-workbench
+# Generative Kimono Pattern Designer
 
-A super vanilla Next.js app using the App Router and plain JavaScript.
+A Next.js App Router project that renders a live kimono mockup using procedural SVG patterns.
+You can drive nearly every visual parameter from sliders: stripes, diamonds, waves, dots, grain,
+mirror offset, color grading, border treatment, and obi sash sizing.
 
 ## Run locally
 
@@ -17,3 +19,9 @@ Open `http://localhost:3000`.
 npm run build
 npm run start
 ```
+
+## Features
+
+- Palette presets plus randomize and reset actions
+- Dense slider panel for geometry, texture, color, and garment styling
+- Procedural SVG generation for unique textile looks per seed
