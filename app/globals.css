@@ -6,36 +6,125 @@ html,
 body {
   margin: 0;
   min-height: 100%;
-  font-family: Arial, Helvetica, sans-serif;
-  background: #f7f7f7;
-  color: #111;
+  font-family:
+    "Inter",
+    "Segoe UI",
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
+  background: linear-gradient(160deg, #d2dfe7 0%, #d9e8eb 50%, #c8d9dd 100%);
+  color: #1e2c35;
 }
 
 body {
   min-height: 100vh;
 }
 
-.page {
-  display: grid;
+.terrainPage {
   min-height: 100vh;
-  place-items: center;
-  padding: 24px;
+  display: grid;
+  grid-template-columns: minmax(270px, 320px) 1fr;
+  gap: 16px;
+  padding: 16px;
 }
 
-.card {
-  width: min(100%, 560px);
-  padding: 32px;
-  background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 12px;
+.panel {
+  border-radius: 18px;
+  background: rgba(238, 245, 247, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.62);
+  box-shadow: 0 14px 40px rgba(58, 79, 89, 0.16);
+  backdrop-filter: blur(8px);
+  padding: 18px 16px 16px;
 }
 
-h1 {
-  margin: 0 0 12px;
-  font-size: 2rem;
-}
-
-p {
+.panel h1 {
   margin: 0;
-  line-height: 1.5;
+  font-size: 1.4rem;
+  letter-spacing: 0.01em;
+}
+
+.subtitle {
+  margin: 12px 0 0;
+  line-height: 1.45;
+  color: #334b58;
+  font-size: 0.96rem;
+}
+
+.controls {
+  margin-top: 20px;
+  display: grid;
+  gap: 12px;
+}
+
+.primaryButton,
+.secondaryButton {
+  width: 100%;
+  border: 0;
+  border-radius: 999px;
+  font-size: 0.95rem;
+  padding: 11px 14px;
+  cursor: pointer;
+  transition:
+    transform 0.15s ease,
+    filter 0.2s ease;
+}
+
+.primaryButton {
+  color: #f4f8fb;
+  background: linear-gradient(145deg, #3f718b, #2d566f);
+}
+
+.secondaryButton {
+  color: #214353;
+  border: 1px solid rgba(41, 80, 99, 0.25);
+  background: rgba(240, 249, 252, 0.75);
+}
+
+.primaryButton:hover,
+.secondaryButton:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.03);
+}
+
+.rangeLabel {
+  font-size: 0.92rem;
+  color: #2e4c5b;
+}
+
+.rangeInput {
+  width: 100%;
+  accent-color: #3c738d;
+}
+
+.statusText {
+  margin: 0;
+  min-height: 44px;
+  font-size: 0.9rem;
+  color: #2f4b59;
+  line-height: 1.45;
+}
+
+.viewport {
+  min-height: calc(100vh - 32px);
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.66);
+  box-shadow: 0 16px 48px rgba(32, 56, 69, 0.22);
+}
+
+.viewport canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+@media (max-width: 940px) {
+  .terrainPage {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto minmax(58vh, 1fr);
+  }
+
+  .viewport {
+    min-height: 58vh;
+  }
 }

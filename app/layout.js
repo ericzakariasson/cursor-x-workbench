@@ -1,8 +1,8 @@
 import "./globals.css";
 
 export const metadata = {
-  title: "Cursor X Workbench",
-  description: "A super vanilla Next.js app."
+  title: "Voice Sand Garden",
+  description: "Mic-reactive 3D terrain sculpting with exportable STL."
 };
 
 export default function RootLayout({ children }) {
