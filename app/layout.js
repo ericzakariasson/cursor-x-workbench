@@ -1,8 +1,8 @@
 import "./globals.css";
 
 export const metadata = {
-  title: "Cursor X Workbench",
-  description: "A super vanilla Next.js app."
+  title: "Type Anatomy Explorer",
+  description: "Interactive typography anatomy explorer with font comparison and quiz mode.",
 };
 
 export default function RootLayout({ children }) {

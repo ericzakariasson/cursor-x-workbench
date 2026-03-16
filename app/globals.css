@@ -6,36 +6,258 @@ html,
 body {
   margin: 0;
   min-height: 100%;
-  font-family: Arial, Helvetica, sans-serif;
-  background: #f7f7f7;
-  color: #111;
 }
 
 body {
   min-height: 100vh;
+  background: #0b0d11;
+  color: #edf1f8;
+  font-family: "Inter", Arial, sans-serif;
 }
 
-.page {
-  display: grid;
-  min-height: 100vh;
-  place-items: center;
-  padding: 24px;
+button,
+input,
+select {
+  font: inherit;
+  color: inherit;
 }
 
-.card {
-  width: min(100%, 560px);
-  padding: 32px;
-  background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 12px;
+.explorer {
+  width: min(1160px, 100%);
+  margin: 0 auto;
+  padding: 36px 24px 46px;
 }
 
-h1 {
-  margin: 0 0 12px;
-  font-size: 2rem;
+.topbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 18px;
 }
 
-p {
+.topbar h1 {
   margin: 0;
-  line-height: 1.5;
+  font-size: clamp(1.4rem, 2vw, 2rem);
+  letter-spacing: 0.03em;
+}
+
+.topbar p {
+  margin: 8px 0 0;
+  color: #9ea6b5;
+  max-width: 640px;
+}
+
+.controls {
+  display: grid;
+  grid-template-columns: auto minmax(220px, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+}
+
+.inline-label {
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #9aa2b0;
+}
+
+.controls input,
+.panel select {
+  border: 1px solid #2f3848;
+  background: #121723;
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+
+.controls input:focus,
+.panel select:focus,
+.glyph:focus,
+.toggle:focus,
+.next-question:focus {
+  outline: 2px solid #62a3ff;
+  outline-offset: 2px;
+}
+
+.toggle,
+.next-question {
+  border: 1px solid #3a4254;
+  background: #181f2d;
+  border-radius: 10px;
+  padding: 10px 12px;
+  cursor: pointer;
+}
+
+.toggle.on {
+  border-color: #78b2ff;
+  color: #cfe2ff;
+}
+
+.compare-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(280px, 1fr));
+  gap: 14px;
+}
+
+.panel {
+  background: linear-gradient(180deg, #101520, #0f131d);
+  border: 1px solid #232c3a;
+  border-radius: 14px;
+  padding: 16px;
+}
+
+.panel-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.panel-header h2 {
+  margin: 0 6px 0 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.glyph-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 12px;
+  min-height: 220px;
+  border-radius: 12px;
+  border: 1px solid #273042;
+  background: #0a0e16;
+}
+
+.glyph-space {
+  width: 26px;
+}
+
+.glyph {
+  position: relative;
+  width: 68px;
+  height: 92px;
+  border-radius: 10px;
+  border: 1px solid #252e3e;
+  background: #0d121e;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  padding: 0;
+}
+
+.glyph:hover,
+.glyph.active {
+  border-color: #609fff;
+  box-shadow: 0 0 0 1px rgba(96, 159, 255, 0.24);
+}
+
+.glyph-char {
+  font-size: 3.2rem;
+  line-height: 1;
+  z-index: 1;
+}
+
+.anatomy-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.guide {
+  fill: none;
+  stroke: #7db5ff;
+  stroke-width: 1.5;
+  stroke-dasharray: 140;
+  stroke-dashoffset: 140;
+  animation: draw 0.55s ease forwards;
+}
+
+.guide.baseline {
+  stroke: #6ad1b2;
+}
+
+.guide.xheight {
+  stroke: #f7d170;
+}
+
+.guide.ascender {
+  stroke: #f28ba8;
+}
+
+.guide.counter {
+  stroke: #8bc0ff;
+}
+
+.guide.serif {
+  stroke: #d6dcf0;
+}
+
+.feature-tags {
+  margin-top: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tag {
+  font-size: 0.78rem;
+  color: #c7d2ea;
+  border: 1px solid #354157;
+  border-radius: 999px;
+  padding: 5px 9px;
+  background: #161e2c;
+}
+
+.quiz-card {
+  margin-top: 14px;
+  border: 1px solid #283246;
+  background: #0f1521;
+  border-radius: 14px;
+  padding: 15px 16px;
+}
+
+.quiz-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.quiz-top h2 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.prompt {
+  margin: 10px 0 8px;
+  color: #a5b2ca;
+}
+
+.feedback {
+  margin: 0;
+  min-height: 24px;
+}
+
+@keyframes draw {
+  from {
+    stroke-dashoffset: 140;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@media (max-width: 900px) {
+  .controls {
+    width: 100%;
+    grid-template-columns: 1fr;
+  }
+
+  .compare-grid {
+    grid-template-columns: 1fr;
+  }
 }
