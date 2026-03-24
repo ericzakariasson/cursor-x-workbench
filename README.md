@@ -1,6 +1,21 @@
-# cursor-x-workbench
+# Wind Energy Simulation
 
-A super vanilla Next.js app using the App Router and plain JavaScript.
+Interactive Next.js simulation that estimates wind farm performance from core turbine and wind inputs.
+
+You can tune:
+- average wind speed
+- rotor diameter
+- number of turbines
+- power coefficient and electrical efficiency
+- hourly wind variability
+
+The dashboard updates in real time with:
+- average and peak farm output
+- annual generation (GWh)
+- capacity factor
+- homes powered estimate
+- yearly CO2 avoided estimate
+- 24-hour wind and power profile chart
 
 ## Run locally
 
@@ -9,9 +24,9 @@ npm install
 npm run dev
 ```
 
-Open `http://localhost:3000`. Use the top-right control to switch light or dark mode; your choice is saved for next visit. First visit follows system appearance.
+Then open `http://localhost:3000`.
 
-## Build
+## Production build
 
 ```bash
 npm run build
