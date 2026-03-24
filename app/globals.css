@@ -22,6 +22,9 @@
   --toggle-border: #e0e0e0;
   --toggle-fg: #0a0a0a;
   --toggle-hover: #ebebeb;
+  --accent-power: #2679ff;
+  --accent-wind: #14b89a;
+  --accent-soft: rgba(38, 121, 255, 0.12);
 }
 
 [data-theme="dark"] {
@@ -43,6 +46,9 @@
   --toggle-border: #404040;
   --toggle-fg: #f5f5f5;
   --toggle-hover: #333;
+  --accent-power: #7ab0ff;
+  --accent-wind: #4ee8c8;
+  --accent-soft: rgba(122, 176, 255, 0.2);
 }
 
 html,
@@ -187,30 +193,224 @@ body {
 
 .page {
   flex: 1;
-  display: grid;
+  display: block;
   width: 100%;
-  min-height: 0;
-  place-items: center;
+  min-height: 100%;
   padding: 24px;
 }
 
 .card {
-  width: min(100%, 560px);
-  padding: 32px;
+  width: 100%;
+  padding: 22px;
   background: var(--card-bg);
   border: 1px solid var(--card-border);
   border-radius: 12px;
   transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
-h1 {
+.wind-sim {
+  width: min(1120px, 100%);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 360px minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.wind-sim__header {
+  grid-column: 1 / -1;
+}
+
+.wind-sim__header h1 {
   margin: 0 0 12px;
-  font-size: 2rem;
+  font-size: clamp(1.75rem, 3vw, 2.4rem);
   color: var(--text);
 }
 
-p {
+.wind-sim__header p {
   margin: 0;
   line-height: 1.5;
   color: var(--text-muted);
+  max-width: 760px;
+}
+
+.wind-sim__controls {
+  position: sticky;
+  top: 78px;
+}
+
+.wind-sim__controls h2,
+.wind-sim__chart-card h2 {
+  margin: 0 0 14px;
+  font-size: 1.1rem;
+}
+
+.slider-field {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.slider-field:last-child {
+  margin-bottom: 0;
+}
+
+.slider-field div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.slider-field span {
+  color: var(--text-muted);
+  font-size: 0.93rem;
+}
+
+.slider-field strong {
+  font-size: 0.95rem;
+}
+
+.slider-field input[type="range"] {
+  width: 100%;
+  accent-color: var(--accent-power);
+}
+
+.wind-sim__metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.metric {
+  padding: 16px;
+}
+
+.metric h3 {
+  margin: 0 0 8px;
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.metric p {
+  margin: 0;
+  font-size: clamp(1.05rem, 2.3vw, 1.4rem);
+  font-weight: 700;
+  color: var(--text);
+}
+
+.wind-sim__chart-card {
+  margin-top: 12px;
+}
+
+.profile-chart {
+  height: 300px;
+  border-radius: 10px;
+  border: 1px solid var(--card-border);
+  background: linear-gradient(
+      to top,
+      transparent 0,
+      transparent calc(25% - 1px),
+      var(--card-border) 25%,
+      transparent calc(25% + 1px),
+      transparent calc(50% - 1px),
+      var(--card-border) 50%,
+      transparent calc(50% + 1px),
+      transparent calc(75% - 1px),
+      var(--card-border) 75%,
+      transparent calc(75% + 1px)
+    ),
+    var(--accent-soft);
+  display: grid;
+  grid-template-columns: repeat(24, minmax(0, 1fr));
+  align-items: end;
+  gap: 4px;
+  padding: 12px 10px;
+}
+
+.profile-chart__hour {
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: end;
+  gap: 2px;
+}
+
+.profile-chart__bar {
+  width: 100%;
+  border-radius: 4px 4px 0 0;
+}
+
+.profile-chart__bar--power {
+  background: var(--accent-power);
+}
+
+.profile-chart__bar--wind {
+  background: var(--accent-wind);
+  opacity: 0.8;
+}
+
+.profile-chart__hour span {
+  grid-column: 1 / -1;
+  text-align: center;
+  margin-top: 6px;
+  font-size: 0.58rem;
+  color: var(--text-muted);
+}
+
+.wind-sim__chart-legend {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  margin: 12px 0 0;
+  color: var(--text-muted);
+  font-size: 0.88rem;
+}
+
+.wind-sim__chart-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.legend-swatch {
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  display: inline-block;
+}
+
+.legend-swatch--power {
+  background: var(--accent-power);
+}
+
+.legend-swatch--wind {
+  background: var(--accent-wind);
+}
+
+@media (max-width: 1024px) {
+  .wind-sim {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .wind-sim__controls {
+    position: static;
+  }
+}
+
+@media (max-width: 720px) {
+  .page {
+    padding: 68px 14px 20px;
+  }
+
+  .wind-sim__metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 480px) {
+  .wind-sim__metrics {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
