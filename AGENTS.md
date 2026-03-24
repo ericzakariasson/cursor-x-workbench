@@ -37,3 +37,13 @@ Examples of the right tone:
 - Done. Set up the board logic, turn handling, and win detection. Reset works too.
 - Got it working. Added the generator, theme switching, and saved favorites. Tested locally.
 - Ran into a CI timeout. The fix is there, but I could not verify the full test run.
+
+## Cursor Cloud specific instructions
+
+This is a vanilla Next.js 16 app (App Router, plain JS, no TypeScript). No databases, external APIs, or environment variables are needed.
+
+- **Dev server**: `npm run dev` starts on port 3000 (uses Turbopack).
+- **Build**: `npm run build` produces an optimized production build.
+- **No lint or test scripts** are configured in `package.json`. There is no ESLint config or test framework set up. If a future agent adds linting or tests, update this section.
+- **No `.env` files** are needed. The app is fully self-contained.
+- See `README.md` for standard run instructions.
