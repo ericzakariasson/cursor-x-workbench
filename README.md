@@ -1,6 +1,6 @@
-# cursor-x-workbench
+# Retro Tetris (mobile optimized)
 
-A super vanilla Next.js app using the App Router and plain JavaScript.
+A retro-inspired Tetris game built with Next.js App Router and plain JavaScript, designed to play well on phones and desktop.
 
 ## Run locally
 
@@ -9,9 +9,26 @@ npm install
 npm run dev
 ```
 
-Open `http://localhost:3000`. Use the top-right control to switch light or dark mode; your choice is saved for next visit. First visit follows system appearance.
+Open `http://localhost:3000`.
 
-## Build
+## How to play
+
+- Tap **Start game** to begin.
+- On mobile, use on-screen controls:
+  - **Left / Right** to move
+  - **Rotate**
+  - **Soft drop** (hold to accelerate)
+  - **Hard drop**
+- On desktop keyboard:
+  - **Arrow Left / Arrow Right** move
+  - **Arrow Up** or **X** rotates
+  - **Arrow Down** soft drops
+  - **Space** hard drops
+  - **P** pauses/resumes
+
+Clear lines to gain score and increase level (speed increases every 10 lines).
+
+## Production build
 
 ```bash
 npm run build

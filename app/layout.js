@@ -3,8 +3,8 @@ import { themeInitScript } from "./theme-init";
 import ThemeToggle from "./components/ThemeToggle";
 
 export const metadata = {
-  title: "Cursor X Workbench",
-  description: "A super vanilla Next.js app."
+  title: "Retro Tetris Mobile",
+  description: "A retro-inspired, mobile-optimized Tetris built with Next.js."
 };
 
 export default function RootLayout({ children }) {
