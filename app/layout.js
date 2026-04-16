@@ -3,8 +3,8 @@ import { themeInitScript } from "./theme-init";
 import ThemeToggle from "./components/ThemeToggle";
 
 export const metadata = {
-  title: "Cursor X Workbench",
-  description: "A super vanilla Next.js app."
+  title: "Tetris",
+  description: "A playable browser Tetris built with Next.js."
 };
 
 export default function RootLayout({ children }) {

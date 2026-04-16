@@ -1,6 +1,6 @@
-# cursor-x-workbench
+# Tetris in Next.js
 
-A super vanilla Next.js app using the App Router and plain JavaScript.
+A playable Tetris game built with Next.js App Router and plain JavaScript.
 
 ## Run locally
 
@@ -10,6 +10,15 @@ npm run dev
 ```
 
 Open `http://localhost:3000`. Use the top-right control to switch light or dark mode; your choice is saved for next visit. First visit follows system appearance.
+
+## Controls
+
+- Left / Right arrow: move piece
+- Up arrow: rotate piece
+- Down arrow: soft drop
+- Space: hard drop
+- P: pause/resume
+- R: restart
 
 ## Build
 
